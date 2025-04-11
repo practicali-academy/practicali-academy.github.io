@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practicali Team - Elite Web Development Training</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: rgb(8, 68, 105);
+            --secondary-color: #5856D6;
+            --text-color: #1D1D1F;
+            --bg-gradient: linear-gradient(135deg, #F5F5F7 0%, #FFFFFF 100%);
+        }
+
+        .content-wrapper {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            visibility: hidden;
+        }
+
+        .content-wrapper.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+            visibility: visible;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .logo-loader {
+            width: 120px;
+            height: auto;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.3;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        [dir="rtl"] {
+            text-align: right;
+        }
+
+        [dir="rtl"] .me-3 {
+            margin-right: 0 !important;
+            margin-left: 1rem !important;
+        }
+
+        [dir="rtl"] .ms-3 {
+            margin-left: 0 !important;
+            margin-right: 1rem !important;
+        }
+
+        [dir="rtl"] .text-start {
+            text-align: right !important;
+        }
+
+        [dir="rtl"] .text-end {
+            text-align: left !important;
+        }
+
+        [dir="rtl"] .carousel-control-prev {
+            left: auto;
+            right: -50px;
+        }
+
+        [dir="rtl"] .carousel-control-next {
+            right: auto;
+            left: -50px;
+        }
+
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .theme-switch .btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .theme-switch .btn i {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        [data-bs-theme="dark"] .theme-switch .btn {
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-bs-theme="dark"] .theme-switch .btn i {
+            color: #fff;
+        }
+
+        .theme-switch .btn:hover {
+            transform: scale(1.1);
+        }
+
+        [data-bs-theme="light"] .theme-switch .btn:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        [data-bs-theme="light"] .theme-switch .btn:hover i {
+            color: #fff;
+        }
+
+        [data-bs-theme="dark"] .theme-switch .btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: #fff;
+        }
+
+        [data-bs-theme="dark"] .theme-switch .btn:hover i {
+            color: #fff;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .hero {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+        }
+
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+
+        .bg-primary {
+            background: var(--primary-color) !important;
+        }
+
+        .border-primary {
+            border-color: var(--primary-color) !important;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .program-card {
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .program-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] {
+            --text-color: #FFFFFF;
+            --bg-gradient: linear-gradient(135deg, #1D1D1F 0%, #2C2C2E 100%);
+        }
+
+        [data-bs-theme="dark"] .bg-white {
+            background-color: #1D1D1F !important;
+        }
+
+        [data-bs-theme="dark"] .bg-light {
+            background-color: #2C2C2E !important;
+        }
+
+        [data-bs-theme="dark"] .stats-card {
+            background: rgba(45, 45, 48, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        [data-bs-theme="dark"] .stats-card h2 {
+            color: #FFFFFF;
+        }
+
+        [data-bs-theme="dark"] .stats-card p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Testimonial Styles */
+        .testimonial-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 1rem;
+            height: 1rem;
+            margin: 0;
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+
+        .carousel-control-prev {
+            left: -50px;
+        }
+
+        .carousel-control-next {
+            right: -50px;
+        }
+
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            opacity: 1;
+        }
+
+        /* Team Card Styles */
+        .team-card {
+            transition: all 0.3s ease;
+        }
+
+        .team-overlay {
+            background: rgba(0, 122, 255, 0.9);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover .team-overlay {
+            opacity: 1;
+        }
+
+        .team-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .team-social a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* CTA Section */
+        .footer a {
+            transition: all 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #fff !important;
+            text-decoration: none;
+        }
+
+        /* Program icons color */
+        .program-icon svg {
+            fill: var(--primary-color) !important;
+        }
+
+        /* Testimonial quote color */
+        .testimonial-card svg {
+            fill: var(--primary-color) !important;
+        }
+
+        /* Bootstrap Icons */
+        @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
+
+        [data-bs-theme="dark"] .testimonial-card {
+            background: rgba(45, 45, 48, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        [data-bs-theme="dark"] .testimonial-card .lead {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        [data-bs-theme="dark"] .testimonial-card h5 {
+            color: #FFFFFF;
+        }
+
+        [data-bs-theme="dark"] .testimonial-card .text-muted {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        [data-bs-theme="dark"] .testimonial-card svg {
+            fill: rgba(255, 255, 255, 0.9) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <img src="logo.png" alt="Practicali Logo" class="logo-loader">
+    </div>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <!-- Theme Switch -->
+        <div class="theme-switch">
+            <button class="btn btn-outline-primary btn-sm" id="themeToggle">
+                <i class="bi bi-moon-stars-fill"></i>
+            </button>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-8" data-aos="fade-up">
+                        <h1 class="display-3 fw-bold mb-4" data-translate="title">Building Elite Web Development Teams</h1>
+                        <p class="lead mb-5" data-translate="subheading">Practicali delivers industry-leading training in Laravel, Flutter, Vue.js, Figma, and System Design.</p>
+                        <div class="d-flex gap-3 justify-content-center">
+                            <a href="#programs" class="btn btn-primary" data-translate="explorePrograms">Explore Our Programs</a>
+                            <a href="#team" class="btn btn-outline-primary" data-translate="meetMentors">Meet Our Mentors</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Showcase -->
+        <section class="py-5 bg-white">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+                        <div class="stats-card">
+                            <h2 class="display-4 fw-bold mb-2">500+</h2>
+                            <p class="text-muted mb-0" data-translate="professionalsTrained">Professionals Trained</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stats-card">
+                            <h2 class="display-4 fw-bold mb-2">30+</h2>
+                            <p class="text-muted mb-0" data-translate="industryPartnerships">Industry Partnerships</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stats-card">
+                            <h2 class="display-4 fw-bold mb-2">95%</h2>
+                            <p class="text-muted mb-0" data-translate="careerPlacement">Career Placement Rate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Programs Grid -->
+        <section class="py-5" id="programs">
+            <div class="container">
+                <h2 class="display-5 text-center mb-5" data-aos="fade-up" data-translate="masterSkills">Master In-Demand Skills</h2>
+                <div class="row g-4">
+                    <!-- Laravel Backend -->
+                    <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                        <div class="program-card card h-100">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="program-icon me-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="var(--primary-color)" class="bi bi-server" viewBox="0 0 16 16">
+                                            <path d="M1.333 2.667C1.333 1.194 4.318 0 8 0s6.667 1.194 6.667 2.667V4c0 1.473-2.985 2.667-6.667 2.667S1.333 5.473 1.333 4V2.667z"/>
+                                            <path d="M1.333 6.334v3C1.333 10.805 4.318 12 8 12s6.667-1.194 6.667-2.667V6.334a6.51 6.51 0 0 1-1.458.79C11.81 7.684 9.967 8 8 8c-1.966 0-3.809-.317-5.208-.876a6.508 6.508 0 0 1-1.458-.79z"/>
+                                            <path d="M14.667 11.668a6.51 6.51 0 0 1-1.458.789c-1.4.56-3.242.876-5.21.876-1.966 0-3.809-.316-5.208-.876a6.51 6.51 0 0 1-1.458-.79v1.666C1.333 14.806 4.318 16 8 16s6.667-1.194 6.667-2.667v-1.665z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="card-title h5 mb-0">Laravel Backend</h3>
+                                </div>
+                                <p class="card-text" data-translate="laravelDesc">Build secure, scalable APIs and robust backend systems with Laravel's powerful framework.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Flutter Mobile -->
+                    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="program-card card h-100">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="program-icon me-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="var(--primary-color)" class="bi bi-phone" viewBox="0 0 16 16">
+                                            <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z"/>
+                                            <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="card-title h5 mb-0">Flutter Mobile</h3>
+                                </div>
+                                <p class="card-text" data-translate="flutterDesc">Create beautiful, native mobile applications for iOS and Android with Flutter.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Vue.js Frontend -->
+                    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="program-card card h-100">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="program-icon me-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="var(--primary-color)" class="bi bi-code-slash" viewBox="0 0 16 16">
+                                            <path d="M10.478 1.646a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="card-title h5 mb-0">Vue.js Frontend</h3>
+                                </div>
+                                <p class="card-text" data-translate="vueDesc">Master modern frontend development with Vue.js and create responsive web applications.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Figma UI/UX -->
+                    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="program-card card h-100">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="program-icon me-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="var(--primary-color)" class="bi bi-palette" viewBox="0 0 16 16">
+                                            <path d="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                            <path d="M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8zm-8 7c.611 0 .654-.171.655-.176.078-.146.124-.464.07-1.119-.014-.168-.037-.37-.061-.591-.052-.464-.112-1.005-.118-1.462-.01-.707.083-1.61.704-2.314.369-.417.845-.578 1.272-.618.404-.038.812.026 1.16.104.343.077.702.186 1.025.284l.028.008c.346.105.658.199.953.266.653.148.904.083.991.024C14.717 9.38 15 9.161 15 8a7 7 0 1 0-7 7z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="card-title h5 mb-0">Figma UI/UX Design</h3>
+                                </div>
+                                <p class="card-text" data-translate="figmaDesc">Design intuitive user interfaces and create seamless user experiences with Figma.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Professional Graphic Design -->
+                    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                        <div class="program-card card h-100">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="program-icon me-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="var(--primary-color)" class="bi bi-vector-pen" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M10.646.646a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1 0 .708l-1.902 1.902-.829 3.313a1.5 1.5 0 0 1-1.024 1.073L1.254 14.746 4.358 4.4A1.5 1.5 0 0 1 5.43 3.377l3.313-.829L10.646.646zm-1.8 2.908-3.173.793a.5.5 0 0 0-.358.342l-2.57 8.565 8.567-2.57a.5.5 0 0 0 .34-.357l.794-3.174-3.6-3.6z"/>
+                                            <path fill-rule="evenodd" d="M2.832 13.228 8 9a1 1 0 1 0-1-1l-4.228 5.168-.026.086.086-.026z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="card-title h5 mb-0">Professional Graphic Design</h3>
+                                </div>
+                                <p class="card-text" data-translate="designDesc">Learn industry-standard graphic design principles and tools for digital media.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- System Design -->
+                    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
+                        <div class="program-card card h-100">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="program-icon me-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="var(--primary-color)" class="bi bi-diagram-3" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5v-1zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="card-title h5 mb-0">System Design</h3>
+                                </div>
+                                <p class="card-text" data-translate="systemDesc">Learn to architect scalable, reliable systems using modern best practices.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success Stories -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <h2 class="display-5 text-center mb-5" data-aos="fade-up" data-translate="successStories">Success Stories</h2>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="testimonial-card text-center p-4" data-aos="fade-up">
+                                        <div class="mb-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="var(--primary-color)" class="bi bi-quote" viewBox="0 0 16 16">
+                                                <path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"/>
+                                            </svg>
+                                        </div>
+                                        <p class="lead mb-4" data-translate="laravelTestimonial">Practicali's Laravel program helped our team deploy 3x faster. The hands-on approach and real-world projects made all the difference.</p>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <img src="https://i.pravatar.cc/60?img=1" alt="Sarah Chen" class="rounded-circle me-3" width="60" height="60">
+                                            <div class="text-start">
+                                                <h5 class="mb-1">Sarah Chen</h5>
+                                                <p class="text-muted mb-0">Tech Lead, InnovateTech</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="testimonial-card text-center p-4" data-aos="fade-up">
+                                        <div class="mb-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="var(--primary-color)" class="bi bi-quote" viewBox="0 0 16 16">
+                                                <path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"/>
+                                            </svg>
+                                        </div>
+                                        <p class="lead mb-4" data-translate="vueTestimonial">The Vue.js and Figma courses transformed our design workflow. We now ship features twice as fast with better user satisfaction.</p>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <img src="https://i.pravatar.cc/60?img=2" alt="Marcus Johnson" class="rounded-circle me-3" width="60" height="60">
+                                            <div class="text-start">
+                                                <h5 class="mb-1">Marcus Johnson</h5>
+                                                <p class="text-muted mb-0">Product Manager, DesignFlow</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev d-none d-md-block" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next d-none d-md-block" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team/Instructors -->
+        <section class="py-5" id="team">
+            <div class="container">
+                <h2 class="display-5 text-center mb-5" data-aos="fade-up" data-translate="learnFromLeaders">Learn from Industry Leaders</h2>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up">
+                        <div class="team-card text-center">
+                            <div class="position-relative mb-3">
+                                <div class="position-relative" style="width: 200px; height: 200px; margin: 0 auto;">
+                                    <img src="https://i.pravatar.cc/200?img=3" alt="Dr. Emily Rodriguez" class="rounded-circle img-fluid position-absolute top-0 start-0 w-100 h-100" width="200" height="200">
+                                    <div class="team-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded-circle">
+                                        <div class="team-social">
+                                            <a href="#" class="text-white mx-2"><i class="bi bi-linkedin"></i></a>
+                                            <a href="#" class="text-white mx-2"><i class="bi bi-twitter"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="h5 mb-1">Dr. Emily Rodriguez</h4>
+                            <p class="text-muted">Lead Laravel Instructor</p>
+                            <p class="small">10+ years in backend development</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                        <div class="team-card text-center">
+                            <div class="position-relative mb-3">
+                                <div class="position-relative" style="width: 200px; height: 200px; margin: 0 auto;">
+                                    <img src="https://i.pravatar.cc/200?img=4" alt="James Wilson" class="rounded-circle img-fluid position-absolute top-0 start-0 w-100 h-100" width="200" height="200">
+                                    <div class="team-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded-circle">
+                                        <div class="team-social">
+                                            <a href="#" class="text-white mx-2"><i class="bi bi-linkedin"></i></a>
+                                            <a href="#" class="text-white mx-2"><i class="bi bi-twitter"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="h5 mb-1">James Wilson</h4>
+                            <p class="text-muted">Flutter Expert</p>
+                            <p class="small">Former Google Developer Expert</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                        <div class="team-card text-center">
+                            <div class="position-relative mb-3">
+                                <div class="position-relative" style="width: 200px; height: 200px; margin: 0 auto;">
+                                    <img src="https://i.pravatar.cc/200?img=5" alt="Nina Patel" class="rounded-circle img-fluid position-absolute top-0 start-0 w-100 h-100" width="200" height="200">
+                                    <div class="team-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded-circle">
+                                        <div class="team-social">
+                                            <a href="#" class="text-white mx-2"><i class="bi bi-linkedin"></i></a>
+                                            <a href="#" class="text-white mx-2"><i class="bi bi-twitter"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="h5 mb-1">Nina Patel</h4>
+                            <p class="text-muted">UI/UX Lead</p>
+                            <p class="small">Award-winning designer</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                        <div class="team-card text-center">
+                            <div class="position-relative mb-3">
+                                <div class="position-relative" style="width: 200px; height: 200px; margin: 0 auto;">
+                                    <img src="https://i.pravatar.cc/200?img=6" alt="Alex Kim" class="rounded-circle img-fluid position-absolute top-0 start-0 w-100 h-100" width="200" height="200">
+                                    <div class="team-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded-circle">
+                                        <div class="team-social">
+                                            <a href="#" class="text-white mx-2"><i class="bi bi-linkedin"></i></a>
+                                            <a href="#" class="text-white mx-2"><i class="bi bi-twitter"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="h5 mb-1">Alex Kim</h4>
+                            <p class="text-muted">System Architecture</p>
+                            <p class="small">15+ years in scalable systems</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-5 bg-primary text-white">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <h2 class="display-4 fw-bold mb-0" data-translate="readyToTransform">Ready to Transform Your Team?</h2>
+                    </div>
+                    <div class="col-lg-6 text-lg-end">
+                        <a href="#contact" class="btn btn-light btn-lg me-3" data-translate="scheduleConsultation">Schedule a Consultation</a>
+                        <a href="#programs" class="btn btn-outline-light btn-lg" data-translate="browseCourses">Browse Courses</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-5 bg-dark text-white">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <h5 class="mb-3">Practicali</h5>
+                        <p class="mb-0">Building elite web development teams through industry-leading training and mentorship.</p>
+                    </div>
+                    <div class="col-sm-6 col-lg-2">
+                        <h5 class="mb-3" data-translate="programs">Programs</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Laravel</a></li>
+                            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Flutter</a></li>
+                            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Vue.js</a></li>
+                            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">UI/UX Design</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-lg-2">
+                        <h5 class="mb-3" data-translate="company">Company</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none" data-translate="about">About</a></li>
+                            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none" data-translate="careers">Careers</a></li>
+                            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none" data-translate="blog">Blog</a></li>
+                            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none" data-translate="contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5 class="mb-3" data-translate="connect">Connect</h5>
+                        <div class="d-flex gap-3 mb-3">
+                            <a href="#" class="text-white-50"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="text-white-50"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" class="text-white-50"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="text-white-50"><i class="bi bi-github"></i></a>
+                        </div>
+                        <p class="small text-white-50 mb-0" data-translate="rightsReserved">&copy; 2024 Practicali. All rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Theme switch functionality
+        const themeSwitch = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-bs-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        // Theme switch event listener
+        themeSwitch.addEventListener('click', function() {
+            const currentTheme = html.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            const icon = themeSwitch.querySelector('i');
+            if (theme === 'dark') {
+                icon.classList.remove('bi-moon-stars-fill');
+                icon.classList.add('bi-sun-fill');
+            } else {
+                icon.classList.remove('bi-sun-fill');
+                icon.classList.add('bi-moon-stars-fill');
+            }
+        }
+
+        // Initialize content visibility
+        function initializeContent() {
+            const contentWrapper = document.querySelector('.content-wrapper');
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            
+            if (contentWrapper && loadingOverlay) {
+                contentWrapper.classList.add('visible');
+                loadingOverlay.classList.add('hidden');
+            }
+        }
+
+        // Show content when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeContent);
+        } else {
+            initializeContent();
+        }
+
+        const translations = {
+            en: {
+                title: "Building Elite Web Development Teams",
+                subheading: "Practicali delivers industry-leading training in Laravel, Flutter, Vue.js, Figma, and System Design.",
+                explorePrograms: "Explore Our Programs",
+                meetMentors: "Meet Our Mentors",
+                professionalsTrained: "Professionals Trained",
+                industryPartnerships: "Industry Partnerships",
+                careerPlacement: "Career Placement Rate",
+                masterSkills: "Master In-Demand Skills",
+                laravelDesc: "Build secure, scalable APIs and robust backend systems with Laravel's powerful framework.",
+                flutterDesc: "Create beautiful, native mobile applications for iOS and Android with Flutter.",
+                vueDesc: "Master modern frontend development with Vue.js and create responsive web applications.",
+                figmaDesc: "Design intuitive user interfaces and create seamless user experiences with Figma.",
+                designDesc: "Learn industry-standard graphic design principles and tools for digital media.",
+                systemDesc: "Learn to architect scalable, reliable systems using modern best practices.",
+                successStories: "Success Stories",
+                laravelTestimonial: "Practicali's Laravel program helped our team deploy 3x faster. The hands-on approach and real-world projects made all the difference.",
+                vueTestimonial: "The Vue.js and Figma courses transformed our design workflow. We now ship features twice as fast with better user satisfaction.",
+                learnFromLeaders: "Learn from Industry Leaders",
+                readyToTransform: "Ready to Transform Your Team?",
+                scheduleConsultation: "Schedule a Consultation",
+                browseCourses: "Browse Courses",
+                programs: "Programs",
+                company: "Company",
+                about: "About",
+                careers: "Careers",
+                blog: "Blog",
+                contact: "Contact",
+                connect: "Connect",
+                rightsReserved: "© 2024 Practicali. All rights reserved."
+            },
+            ar: {
+                title: "بناء فرق تطوير الويب النخبة",
+                subheading: "تقدم براكتيكالي تدريباً رائداً في الصناعة في لارافيل، فلتر، فيو جي إس، فيجما، وتصميم الأنظمة.",
+                explorePrograms: "اكتشف برامجنا",
+                meetMentors: "التقِ بمرشدينا",
+                professionalsTrained: "محترفون تم تدريبهم",
+                industryPartnerships: "شراكات صناعية",
+                careerPlacement: "معدل التوظيف",
+                masterSkills: "إتقان المهارات المطلوبة",
+                laravelDesc: "بناء واجهات برمجة التطبيقات الآمنة والقابلة للتطوير وأنظمة الخلفية القوية باستخدام إطار عمل لارافيل القوي.",
+                flutterDesc: "إنشاء تطبيقات جوال جميلة وأصلية لنظامي iOS و Android باستخدام فلتر.",
+                vueDesc: "إتقان تطوير واجهة المستخدم الحديثة باستخدام فيو جي إس وإنشاء تطبيقات ويب متجاوبة.",
+                figmaDesc: "تصميم واجهات مستخدم بديهية وإنشاء تجارب مستخدم سلسة باستخدام فيجما.",
+                designDesc: "تعلم مبادئ تصميم الجرافيك المعيارية في الصناعة وأدوات الوسائط الرقمية.",
+                systemDesc: "تعلم تصميم أنظمة قابلة للتطوير وموثوقة باستخدام أفضل الممارسات الحديثة.",
+                successStories: "قصص النجاح",
+                laravelTestimonial: "ساعد برنامج لارافيل من براكتيكالي فريقنا في النشر بسرعة 3 أضعاف. كان للنهج العملي والمشاريع الواقعية كل الفرق.",
+                vueTestimonial: "حولت دورات فيو جي إس وفيجما سير عمل التصميم لدينا. نحن الآن نطلق الميزات بضعف السرعة مع رضا أفضل للمستخدمين.",
+                learnFromLeaders: "تعلم من قادة الصناعة",
+                readyToTransform: "هل أنت مستعد لتحويل فريقك؟",
+                scheduleConsultation: "جدولة استشارة",
+                browseCourses: "تصفح الدورات",
+                programs: "البرامج",
+                company: "الشركة",
+                about: "من نحن",
+                careers: "الوظائف",
+                blog: "المدونة",
+                contact: "اتصل بنا",
+                connect: "تواصل معنا",
+                rightsReserved: "© 2024 براكتيكالي. جميع الحقوق محفوظة."
+            }
+        };
+
+        // Function to detect user's location and set language
+        async function detectUserLanguage() {
+            try {
+                // If no saved preference, detect location
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                
+                // List of Middle Eastern countries
+                const middleEastCountries = [
+                    'AE', 'BH', 'EG', 'IQ', 'IR', 'IL', 'JO', 'KW', 'LB', 'OM', 
+                    'PS', 'QA', 'SA', 'SY', 'TR', 'YE'
+                ];
+
+                // Set language based on region
+                const userLanguage = middleEastCountries.includes(data.country_code) ? 'ar' : 'en';
+                updateLanguage(userLanguage);
+            } catch (error) {
+                console.error('Error detecting location:', error);
+                // Default to English if detection fails
+                updateLanguage('en');
+            }
+        }
+
+        function updateLanguage(language) {
+            document.documentElement.lang = language;
+            document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+            
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[language][key]) {
+                    element.textContent = translations[language][key];
+                }
+            });
+        }
+
+        // Initialize language based on location
+        detectUserLanguage();
+
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+    </script>
+</body>
+</html>
