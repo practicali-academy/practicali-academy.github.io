@@ -391,6 +391,16 @@
         [data-bs-theme="dark"] .testimonial-card svg {
             fill: rgba(255, 255, 255, 0.9) !important;
         }
+
+        [data-bs-theme="dark"] .btn-outline-primary {
+            color: #fff !important;
+            border-color: #fff !important;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-primary:hover {
+            background-color: #fff !important;
+            color: var(--primary-color) !important;
+        }
     </style>
 </head>
 <body>
@@ -719,7 +729,7 @@
                 <div class="row g-4">
                     <div class="col-lg-4 mb-4 mb-lg-0">
                         <h5 class="mb-3">Practicali</h5>
-                        <p class="mb-0">Building elite web development teams through industry-leading training and mentorship.</p>
+                        <p class="mb-0" data-translate="footerDescription">Building elite web development teams through industry-leading training and mentorship.</p>
                     </div>
                     <div class="col-sm-6 col-lg-2">
                         <h5 class="mb-3" data-translate="programs">Programs</h5>
@@ -794,8 +804,9 @@
             const loadingOverlay = document.querySelector('.loading-overlay');
             
             if (contentWrapper && loadingOverlay) {
-                contentWrapper.classList.add('visible');
-                loadingOverlay.classList.add('hidden');
+                // Keep content hidden until language is resolved
+                contentWrapper.classList.remove('visible');
+                loadingOverlay.classList.remove('hidden');
             }
         }
 
@@ -836,7 +847,12 @@
                 blog: "Blog",
                 contact: "Contact",
                 connect: "Connect",
-                rightsReserved: "© 2024 Practicali. All rights reserved."
+                rightsReserved: "© 2024 Practicali. All rights reserved.",
+                laravel: "Laravel",
+                flutter: "Flutter",
+                vuejs: "Vue.js",
+                uiux: "UI/UX Design",
+                footerDescription: "Building elite web development teams through industry-leading training and mentorship."
             },
             ar: {
                 title: "بناء فرق تطوير الويب النخبة",
@@ -867,7 +883,12 @@
                 blog: "المدونة",
                 contact: "اتصل بنا",
                 connect: "تواصل معنا",
-                rightsReserved: "© 2024 براكتيكالي. جميع الحقوق محفوظة."
+                rightsReserved: "© 2024 براكتيكالي. جميع الحقوق محفوظة.",
+                laravel: "لارافيل",
+                flutter: "فلتر",
+                vuejs: "فيو جي إس",
+                uiux: "تصميم واجهة المستخدم/تجربة المستخدم",
+                footerDescription: "بناء فرق تطوير الويب النخبة من خلال التدريب والتدريب الإرشادي الرائد في الصناعة."
             }
         };
 
@@ -905,6 +926,14 @@
                     element.textContent = translations[language][key];
                 }
             });
+
+            // Show content only after language is set
+            const contentWrapper = document.querySelector('.content-wrapper');
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            if (contentWrapper && loadingOverlay) {
+                contentWrapper.classList.add('visible');
+                loadingOverlay.classList.add('hidden');
+            }
         }
 
         // Initialize language based on location
